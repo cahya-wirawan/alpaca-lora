@@ -5,7 +5,7 @@ from typing import List
 import fire
 import torch
 import transformers
-from datasets import load_dataset
+from datasets import load_dataset, concatenate_datasets
 
 """
 Unused imports:
@@ -23,6 +23,7 @@ from peft import (
 from transformers import LlamaForCausalLM, LlamaTokenizer
 
 from utils.prompter import Prompter
+from utils.data import combine
 
 
 def train(
@@ -179,7 +180,7 @@ def train(
     if data_path.endswith(".json") or data_path.endswith(".jsonl"):
         data = load_dataset("json", data_files=data_path)
     else:
-        data = load_dataset(data_path)
+        data = combine(data_path)
 
     if resume_from_checkpoint:
         # Check the available weights and load them
